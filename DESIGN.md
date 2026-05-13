@@ -165,7 +165,6 @@ This is the default composition for every standard ERP page.
   <AppSidebar items={menuItems} footerItems={footerItems} brand={brand} />
   <SidebarInset className="min-h-screen bg-[#f5f6f8] text-slate-900">
     <ErpShellHeader
-      utilitySlot={utilitySlot}
       userMenuItems={userMenuItems}
       userLabel={userLabel}
       userInitials={userInitials}
@@ -186,6 +185,7 @@ Use these as the default shell measurements.
 - Sidebar content padding: `px-2 py-2`
 - Sidebar top-level row height: `h-8`
 - Sidebar sub-menu row height: `h-7`
+- Sidebar menu and sub-menu font size: identical; do not reduce sub-menu text size
 - Utility control height: `h-8`
 - User avatar size: `size-6`
 - Brand icon size: `size-8`
@@ -233,6 +233,15 @@ type BrandConfig = {
 };
 ```
 
+Recommended default for this shell:
+
+```ts
+const brand = {
+  title: "Bethezank Lab",
+  subtitle: "www.bethezank.com",
+};
+```
+
 These shapes are intentionally generic so the shell can be reused in a new project without changing the underlying UI rules.
 
 ## Navbar
@@ -242,7 +251,6 @@ The navbar is the fixed top action bar.
 ### Navbar Purpose
 
 - expose sidebar toggle
-- expose shell-level utilities
 - expose user account actions
 - remain visually stable across all pages
 
@@ -259,16 +267,14 @@ The left cluster should contain:
 
 The right cluster should contain:
 
-- zero or more utility actions
 - user menu trigger
-
-This means date, filters, context selectors, or alerts are allowed here, but they must remain shell-level utilities and stay compact.
 
 ### Navbar Rules
 
 - No global search box by default
 - No page title in the navbar by default
 - No page subtitle in the navbar by default
+- No calendar or date control in the navbar
 - No oversized CTA in the navbar
 - All navbar controls must remain compact
 - All clickable navbar elements must use `cursor-pointer`
@@ -278,12 +284,10 @@ This means date, filters, context selectors, or alerts are allowed here, but the
 
 ```tsx
 export function ErpShellHeader({
-  utilitySlot,
   userLabel,
   userInitials,
   userMenuItems,
 }: {
-  utilitySlot?: React.ReactNode;
   userLabel: string;
   userInitials: string;
   userMenuItems: UserMenuItem[];
@@ -296,8 +300,6 @@ export function ErpShellHeader({
         </div>
 
         <div className="flex items-center gap-2">
-          {utilitySlot}
-
           <DropdownMenu>
             <DropdownMenuTrigger className="inline-flex h-8 cursor-pointer items-center gap-2 rounded-md border border-[#d8dde6] bg-white px-2 text-left outline-none transition hover:bg-slate-100">
               <Avatar className="size-6 rounded-md border border-[#d8dde6]">
@@ -352,9 +354,9 @@ Recommended trigger content:
 
 #### Utility Actions
 
-- are optional
-- must represent shell-level actions, not page-level primary actions
-- may open dialogs, popovers, date pickers, notifications, or selectors
+- are not part of the default navbar for this shell
+- should be added only if the project later has a clear shell-level need
+- must not reintroduce a calendar or date picker into the navbar
 
 #### User Menu
 
@@ -562,6 +564,8 @@ export function AppSidebar({
 - Menu spacing must stay compact
 - Top-level row height: `h-8`
 - Child row height: `h-7`
+- Sub-menu text size must match top-level menu text size
+- Do not use reduced typography for child items
 - Sub-menu indentation must stay visible
 - Chevron rotation must communicate open state
 
