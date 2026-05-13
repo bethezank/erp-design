@@ -25,12 +25,20 @@ The blueprint should guarantee consistency in:
 
 The default source of truth for UI components is `shadcn/ui`.
 
+This is a non-negotiable rule for shipped UI.
+If `shadcn/ui` has a suitable default primitive or pattern, it must be used.
+This applies to every component in the product shell and every business screen.
+Treat `shadcn/ui` as mandatory for navbar, sidebar, buttons, inputs, selects, cards, dialogs, tables, menus, popovers, badges, pagination, and all other reusable UI building blocks.
+Do not ship browser-native form UI in its place.
+
 When building a new project from this blueprint:
 
 1. install the shadcn skill first
 2. use `shadcn/ui` components as the primary building blocks
 3. compose custom ERP patterns on top of those primitives
 4. create custom components only when `shadcn/ui` does not already provide a suitable base
+
+Never replace an available `shadcn/ui` component with a custom or browser-native alternative just for convenience.
 
 Install command:
 
@@ -47,6 +55,9 @@ This rule exists to keep future projects:
 
 ## Non-Native Control Rule
 
+This is a hard rule.
+Shipped controls must render with `shadcn/ui` surfaces and interactions, not browser UI.
+
 Dropdown-like controls must use `shadcn/ui` components, not browser-native UI.
 
 This applies to:
@@ -57,10 +68,19 @@ This applies to:
 - menubar
 - popover-based action menus
 - command-driven option pickers
+- date picker
+- date range picker
+- calendar popovers
 
 Do not use:
 
 - native browser `<select>` styling as the final UI
+- native browser `<input type="date">` as the final UI
+- native browser `<input type="datetime-local">` as the final UI
+- native browser `<input type="month">` as the final UI
+- native browser `<input type="week">` as the final UI
+- browser calendar popovers
+- browser time/date chooser UI
 - browser-default context menus
 - unstyled HTML dropdown surfaces
 
@@ -81,6 +101,7 @@ This rule is mandatory because browser-native dropdown UIs are inconsistent acro
 - Compact enterprise layout
 - Default `shadcn` radius
 - Sarabun for both Thai and English
+- Base application font size: `14px`
 - Strong border structure
 - White working surfaces on a soft neutral page background
 - Functional and operational tone
@@ -183,9 +204,10 @@ Use these as the default shell measurements.
 - Navbar horizontal padding: `px-4 md:px-5`
 - Content padding: `px-4 py-4 md:px-5`
 - Sidebar content padding: `px-2 py-2`
+- Base application font size: `14px`
 - Sidebar top-level row height: `h-8`
 - Sidebar sub-menu row height: `h-7`
-- Sidebar menu and sub-menu font size: identical; do not reduce sub-menu text size
+- Sidebar menu and sub-menu font size: `14px`; identical for both levels
 - Utility control height: `h-8`
 - User avatar size: `size-6`
 - Brand icon size: `size-8`
@@ -307,7 +329,7 @@ export function ErpShellHeader({
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
-              <span className="hidden text-[13px] font-medium text-slate-900 sm:block">
+              <span className="hidden text-sm font-medium text-slate-900 sm:block">
                 {userLabel}
               </span>
               <ChevronDownIcon className="size-4 text-slate-500" />
@@ -459,7 +481,7 @@ export function AppSidebar({
                       <SidebarMenuButton
                         size="default"
                         onClick={() => toggleMenu(item.title)}
-                        className="h-8 px-2 text-[13px]"
+                        className="h-8 px-2 text-sm"
                       >
                         {item.icon ? <item.icon className="size-4" /> : null}
                         <span>{item.title}</span>
@@ -481,7 +503,7 @@ export function AppSidebar({
                             <SidebarMenuSubItem key={subItem.title}>
                               <SidebarMenuSubButton
                                 render={<Link href={subItem.href} />}
-                                className="h-7 px-2 text-[12px]"
+                                className="h-7 px-2 text-sm"
                               >
                                 {subItem.icon ? (
                                   <subItem.icon className="size-3.5" />
@@ -497,7 +519,7 @@ export function AppSidebar({
                     <SidebarMenuButton
                       isActive={pathname === item.href}
                       render={<Link href={item.href ?? "#"} />}
-                      className="h-8 px-2 text-[13px]"
+                      className="h-8 px-2 text-sm"
                     >
                       {item.icon ? <item.icon className="size-4" /> : null}
                       <span>{item.title}</span>
@@ -515,7 +537,7 @@ export function AppSidebar({
           <SidebarMenu>
             {footerItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton className="h-8 px-2 text-[13px]">
+                <SidebarMenuButton className="h-8 px-2 text-sm">
                   {item.icon ? <item.icon className="size-4" /> : null}
                   <span>{item.title}</span>
                 </SidebarMenuButton>
@@ -630,6 +652,7 @@ The content area is the main work surface.
 - Borders stay visible but soft
 - Spacing stays compact
 - Cards are the default grouping unit
+- Card structure should be built from `shadcn/ui` card primitives
 - Decorative empty space should be minimized
 - Card headers should visually separate title metadata from the card body
 
@@ -763,6 +786,8 @@ Forms should feel compact, structured, and operational.
 - controls avoid consumer-style oversized presentation
 - all actionable controls use `cursor-pointer`
 - select-like controls must use `shadcn/ui` `Select`, not browser-native `<select>` as the shipped UI
+- date-related controls must use a `shadcn/ui` popover/calendar pattern, not browser-native date inputs as the shipped UI
+- no shipped form control may expose browser-default dropdown or calendar chrome
 
 ### Select Pattern
 
@@ -785,6 +810,25 @@ Select rules:
 - the trigger must be a styled `shadcn/ui` trigger
 - the options panel must be a custom `shadcn/ui` floating layer
 - the final UI must not fall back to browser-default select styling
+
+### Date Picker Rule
+
+Date selection must not use browser-native picker UI.
+
+Required pattern:
+
+- use `shadcn/ui` trigger styling
+- open a custom popover
+- render a custom calendar surface
+- keep typography, spacing, and border treatment consistent with default `shadcn/ui`
+
+Forbidden shipped UI:
+
+- `<input type="date">`
+- `<input type="datetime-local">`
+- `<input type="month">`
+- `<input type="week">`
+- any browser-rendered calendar or date chooser popup
 
 ### Image Upload Preview Pattern
 
@@ -838,6 +882,7 @@ Tables are a primary ERP surface and must stay consistent.
 
 ### Table Rules
 
+- table structure should be built from `shadcn/ui` table primitives
 - status badges in rows must use the shared badge color mapping
 - `Approved` and `Complete` must use success styling
 - table header row must use a soft gray background to separate column labels from row data
@@ -954,6 +999,7 @@ Overflow rules:
 - Chevron rotation is a state indicator, not a decorative animation
 - Hover states should be subtle and functional
 - Menus and dropdowns must use custom `shadcn/ui` surfaces, never browser-native UI
+- Browser-native control chrome is not allowed in shipped ERP screens
 
 ## Menu Surface Pattern
 
@@ -981,12 +1027,14 @@ Menu rules:
 
 If you start a new project from this blueprint:
 
+- use `shadcn/ui` as the source for every reusable component by default
 - keep the shell structure
 - keep the spacing system
 - keep the border system
 - keep the badge color mapping
 - keep full off-canvas sidebar collapse
 - keep the compact enterprise interaction style
+- do not swap in browser-native UI or a parallel component library where `shadcn/ui` already covers the need
 - replace only project-specific data such as:
   - brand name
   - menu tree
@@ -1000,6 +1048,7 @@ If you start a new project from this blueprint:
 
 Before approving a new screen, confirm:
 
+- every reusable UI component is built from `shadcn/ui` primitives or patterns when available
 - the shell uses Navbar, Sidebar, and Content in the same structure
 - navbar border aligns with sidebar header border
 - sidebar collapses fully off-canvas
@@ -1011,5 +1060,6 @@ Before approving a new screen, confirm:
 - image upload preview uses thumbnail plus corner remove action
 - tables include status consistency, rows-per-page, and pagination
 - every clickable element uses `cursor-pointer`
+- no component falls back to browser-native UI when a `shadcn/ui` option exists
 
 If any of these fail, the page is no longer a faithful implementation of the blueprint.
