@@ -106,6 +106,7 @@ This rule is mandatory because browser-native dropdown UIs are inconsistent acro
 - White working surfaces on a soft neutral page background
 - Functional and operational tone
 - Minimal decoration
+- No drop shadow anywhere in the shipped ERP UI
 
 The product should feel:
 
@@ -121,6 +122,7 @@ The product should not feel:
 - overly rounded
 - dark
 - decorative
+- elevated by shadow effects
 
 ## Theme Tokens
 
@@ -653,6 +655,7 @@ The content area is the main work surface.
 - Spacing stays compact
 - Cards are the default grouping unit
 - Card structure should be built from `shadcn/ui` card primitives
+- Card surfaces must use real background fill, not shadow as a simulated background
 - Decorative empty space should be minimized
 - Card headers should visually separate title metadata from the card body
 
@@ -690,6 +693,8 @@ This is the default ERP card pattern.
 - Title should use stronger contrast than the subtitle
 - Subtitle should stay readable but lower-emphasis
 - Body content should begin below the separator line, not visually merge into the header
+- Cards must not use shadow as the background surface or as the primary separation treatment
+- Prefer white fill plus border; keep card shadow removed with `shadow-none`
 
 ## Buttons
 
@@ -843,7 +848,7 @@ This is a required reusable form pattern.
     >
       <button
         type="button"
-        className="absolute -right-2 -top-2 flex size-5 cursor-pointer items-center justify-center rounded-full border border-[#d8dde6] bg-white text-[10px] text-slate-700 shadow-sm"
+        className="absolute -right-2 -top-2 flex size-5 cursor-pointer items-center justify-center rounded-full border border-[#d8dde6] bg-white text-[10px] text-slate-700"
         onClick={() => removeImage(image.id)}
       >
         X
@@ -1000,6 +1005,7 @@ Overflow rules:
 - Hover states should be subtle and functional
 - Menus and dropdowns must use custom `shadcn/ui` surfaces, never browser-native UI
 - Browser-native control chrome is not allowed in shipped ERP screens
+- Drop shadow and box-shadow are forbidden in all shipped UI components
 
 ## Menu Surface Pattern
 
@@ -1056,6 +1062,8 @@ Before approving a new screen, confirm:
 - menu configuration is data-driven, not hardcoded into layout logic
 - content uses white cards on the neutral page background
 - buttons, badges, and cards follow the shared component rules
+- cards do not use shadow as a fake background or primary separation layer
+- no component uses drop shadow or box-shadow in any state
 - forms include compact operational states
 - image upload preview uses thumbnail plus corner remove action
 - tables include status consistency, rows-per-page, and pagination
