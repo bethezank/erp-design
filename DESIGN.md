@@ -63,6 +63,11 @@ components:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.foreground}"
     width: 256px
+  sidebar-mobile-close:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.md}"
+    size: 40px
   popover:
     backgroundColor: "{colors.popover}"
     textColor: "{colors.foreground}"
@@ -175,12 +180,13 @@ Core measurements:
 - Top-level sidebar row height: `h-8`
 - Sidebar child row height: `h-7`
 - Utility control height: `h-8`
+- Mobile sidebar close button size: `size-10`
 - User avatar size: `size-6`
 - Brand icon size: `size-8`
 
-The navbar contains a left cluster for the sidebar trigger and a right cluster for the user menu. Do not place a global search box, page title, page subtitle, calendar, date picker, or oversized call to action in the default navbar.
+The navbar contains a left cluster for the sidebar trigger and a right cluster for the user menu. On mobile, the sidebar trigger must remain visible while the sidebar is closed so users can open navigation. Do not place a global search box, page title, page subtitle, calendar, date picker, or oversized call to action in the default navbar.
 
-The sidebar uses full off-canvas collapse. It must hide completely when collapsed, stay locked to the viewport while content scrolls, support direct links and expandable parents, support nested child items, and use route-aware active states.
+The sidebar uses full off-canvas collapse. It must hide completely when collapsed, stay locked to the viewport while content scrolls, support direct links and expandable parents, support nested child items, and use route-aware active states. When the sidebar is open on mobile, it must render its own close button inside the sidebar header because the navbar trigger may be covered by the off-canvas panel.
 
 Content uses white cards on the neutral page background. Cards are the default grouping unit when a section has its own title, represents a workflow, groups related information, or needs a clear business boundary.
 
@@ -235,7 +241,7 @@ type BrandConfig = {
 
 The sidebar trigger toggles the sidebar on every standard shell page. Use state-aware panel icons: `panel-left-close` when open and `panel-left-open` when closed. The user menu opens a dropdown aligned to the end and contains account-related or shell-level actions.
 
-All navbar controls are compact and clickable elements use `cursor-pointer`. The navbar background stays white, its bottom border aligns with the sidebar header border, and it must not visually merge into the content area.
+All navbar controls are compact and clickable elements use `cursor-pointer`. The navbar background stays white, its bottom border aligns with the sidebar header border, and it must not visually merge into the content area. On mobile, never hide the navbar sidebar trigger while the sidebar is closed.
 
 ### Sidebar
 
@@ -243,11 +249,27 @@ Use `collapsible="offcanvas"` and keep the sidebar fixed to the viewport:
 
 ```tsx
 <Sidebar className="fixed inset-y-0 left-0 z-40 border-r border-[#d8dde6] bg-white text-slate-900">
-  <SidebarHeader className="h-14 shrink-0 border-b border-[#d8dde6] bg-white px-4 py-0" />
+  <SidebarHeader className="h-14 shrink-0 border-b border-[#d8dde6] bg-white px-4 py-0">
+    <div className="flex w-full items-center justify-between gap-3">
+      <BrandLockup brand={brand} />
+      <SidebarTrigger className="size-10 shrink-0 cursor-pointer rounded-md border border-[#d8dde6] bg-white text-slate-900 hover:bg-slate-100 md:hidden">
+        <PanelLeftCloseIcon className="size-5" />
+      </SidebarTrigger>
+    </div>
+  </SidebarHeader>
   <SidebarContent className="min-h-0 flex-1 overflow-y-auto bg-white px-2 py-2" />
   <SidebarFooter className="shrink-0 border-t border-[#d8dde6] bg-white p-2" />
 </Sidebar>
 ```
+
+Mobile sidebar close behavior is required:
+
+- Render a visible `SidebarTrigger` or equivalent close button inside the sidebar header on mobile.
+- Place it on the right side of the brand lockup so it is visible in the first viewport.
+- Use `PanelLeftCloseIcon` or an equivalent close/collapse icon.
+- Keep the button at least `size-10` with `shrink-0`, `cursor-pointer`, border, and white background.
+- Do not rely only on the navbar trigger to close the mobile sidebar because the open sidebar can cover that trigger.
+- Do not hide the close button behind the brand block, sidebar content scroll area, or overlay layer.
 
 Direct-link items navigate to their route and follow route-aware active state. Expandable parent items toggle local open state. Child rows navigate to routes and remain visually subordinate through indentation, not smaller typography.
 
@@ -294,9 +316,11 @@ Wrap wide tables in an `overflow-x-auto` container and give the table a minimum 
 - Do use `shadcn/ui` primitives or patterns whenever they exist.
 - Do keep the shell data-driven and replace only project-specific brand, menu, route, user, and content data.
 - Do keep navbar, sidebar, and content structure consistent across standard ERP pages.
+- Do render a visible mobile close/collapse button inside the open sidebar header.
 - Do use borders and flat surfaces for hierarchy.
 - Do keep all clickable controls visibly interactive with `cursor-pointer`.
 - Do keep table status colors consistent with the shared status mapping.
+- Don't rely only on a navbar trigger to close an open mobile sidebar.
 - Don't use browser-native select, date, calendar, dropdown, or context-menu UI in shipped screens.
 - Don't use drop shadow or `box-shadow` in any shipped UI state.
 - Don't add default navbar search, page titles, date controls, or oversized calls to action without a clear shell-level reason.
