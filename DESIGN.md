@@ -129,6 +129,8 @@ The default source of truth for UI components is `shadcn/ui`. If `shadcn/ui` has
 
 Project-specific data is replaceable. Brand names, menu labels, routes, dates, user identities, table rows, and page content are examples, not fixed product data. The shell structure, token choices, interaction rules, and component behavior are the stable parts.
 
+Every clickable component must advertise interactivity with `cursor-pointer`. This applies to buttons, icon buttons, menu triggers, sidebar rows, pagination controls, tabs, dropdown triggers, list items that act like commands, and any custom surface that handles click or tap.
+
 ## Colors
 
 The palette is light-mode only and built from neutral working surfaces with strong but quiet borders.
@@ -295,13 +297,22 @@ Use `shadcn/ui` card primitives with white fill, soft border, and no shadow.
 
 Buttons come from `shadcn/ui`, use compact spacing, and use `cursor-pointer`. Primary buttons use `--primary`; destructive buttons use `--destructive`; secondary, outline, and ghost variants should stay visually quieter than the main action.
 
-Menus, dropdowns, context menus, menubars, popovers, command pickers, date pickers, date ranges, and calendar popovers must render as custom `shadcn/ui` surfaces. Do not ship browser-default dropdown, context menu, calendar, or date chooser chrome.
+Menus, dropdowns, context menus, menubars, popovers, command pickers, date pickers, date ranges, and calendar popovers must render as the default `shadcn/ui` surfaces. Do not restyle them back toward browser-native chrome, and do not replace them with browser-default dropdown, context menu, calendar, or date chooser UI.
+
+For dropdown and menu-list behavior, `shadcn/ui` is mandatory:
+
+- Use the default `shadcn/ui` primitive for `DropdownMenu`, `Menubar`, `ContextMenu`, `Command`, `Select`, `Popover`, and related menu-list surfaces.
+- Keep the shipped interaction model, layering, spacing, and keyboard behavior aligned with `shadcn/ui` defaults unless a project-specific extension is required.
+- Do not use native `<select>` or browser-rendered option lists as the final shipped UI.
+- Do not use browser-native context menus or browser-native date or calendar pickers as the final shipped UI.
 
 ### Forms
 
 Forms are compact, structured, and operational. Required coverage includes text input, select, textarea, checkbox, radio group, switch, disabled field, read-only field, file upload, thumbnail image preview with remove action, date picker, and date range.
 
 Select-like controls must use `shadcn/ui` `Select`, not native `<select>` as the shipped UI. Date controls must use a `shadcn/ui` popover/calendar pattern, not native `<input type="date">`, `<input type="datetime-local">`, `<input type="month">`, or `<input type="week">`.
+
+Any form or list component that opens choices, commands, or navigation must use `cursor-pointer` on the interactive trigger and interactive items.
 
 Image upload previews are small thumbnails with a corner remove action. Removing one image removes only that preview item, and previews stay compact enough to support repeated business workflows.
 
@@ -319,8 +330,10 @@ Wrap wide tables in an `overflow-x-auto` container and give the table a minimum 
 - Do render a visible mobile close/collapse button inside the open sidebar header.
 - Do use borders and flat surfaces for hierarchy.
 - Do keep all clickable controls visibly interactive with `cursor-pointer`.
+- Do use the default `shadcn/ui` primitives for dropdowns and menu lists.
 - Do keep table status colors consistent with the shared status mapping.
 - Don't rely only on a navbar trigger to close an open mobile sidebar.
+- Don't ship clickable components without `cursor-pointer`.
 - Don't use browser-native select, date, calendar, dropdown, or context-menu UI in shipped screens.
 - Don't use drop shadow or `box-shadow` in any shipped UI state.
 - Don't add default navbar search, page titles, date controls, or oversized calls to action without a clear shell-level reason.
