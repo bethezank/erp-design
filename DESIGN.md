@@ -1,187 +1,155 @@
+---
+version: alpha
+name: ERP UI Blueprint
+description: Compact light-mode ERP interface system built on shadcn/ui primitives.
+colors:
+  primary: "#171717"
+  foreground: "#111827"
+  secondary: "#374151"
+  muted: "#4B5563"
+  surface: "#FFFFFF"
+  panel: "#F5F6F8"
+  popover: "#FFFFFF"
+  border: "#D8DDE6"
+  input: "#DDE3EA"
+  destructive: "#B91C1C"
+  success: "#047857"
+  warning: "#B45309"
+  info: "#2563EB"
+typography:
+  heading-md:
+    fontFamily: Sarabun
+    fontSize: 16px
+    fontWeight: 600
+    lineHeight: 1.35
+    letterSpacing: 0em
+  body-md:
+    fontFamily: Sarabun
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 1.5
+    letterSpacing: 0em
+  label-sm:
+    fontFamily: Sarabun
+    fontSize: 12px
+    fontWeight: 500
+    lineHeight: 1.25
+    letterSpacing: 0.08em
+rounded:
+  sm: 4px
+  md: 8px
+  lg: 10px
+  full: 9999px
+spacing:
+  xs: 4px
+  sm: 8px
+  md: 16px
+  lg: 20px
+  xl: 24px
+  navbar-height: 56px
+  sidebar-row: 32px
+  sidebar-sub-row: 28px
+components:
+  app-shell:
+    backgroundColor: "{colors.panel}"
+    textColor: "{colors.foreground}"
+    typography: "{typography.body-md}"
+  card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.lg}"
+  sidebar:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.foreground}"
+    width: 256px
+  popover:
+    backgroundColor: "{colors.popover}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.sm}"
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.surface}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.md}"
+    height: 32px
+    padding: "{spacing.md}"
+  button-secondary:
+    backgroundColor: "{colors.secondary}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.md}"
+    height: 32px
+  button-destructive:
+    backgroundColor: "{colors.destructive}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.md}"
+    height: 32px
+  input:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.md}"
+    height: 32px
+  table-header:
+    backgroundColor: "{colors.panel}"
+    textColor: "{colors.muted}"
+    typography: "{typography.label-sm}"
+  badge-success:
+    backgroundColor: "{colors.success}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.full}"
+  badge-warning:
+    backgroundColor: "{colors.warning}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.full}"
+  badge-info:
+    backgroundColor: "{colors.info}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.full}"
+  border-system:
+    backgroundColor: "{colors.border}"
+    height: 1px
+  field-border:
+    backgroundColor: "{colors.input}"
+    height: 1px
+---
+
 # ERP UI Blueprint
 
-This document is a reusable blueprint for building ERP interfaces with a consistent shell, consistent interactions, and consistent component behavior.
+## Overview
 
-It is intentionally project-agnostic.
-Do not treat any label, menu name, route, date, or user identity in examples as fixed product data.
-Treat them as replaceable placeholders inside a stable UI system.
+This design system describes a reusable ERP application shell for operational business software. It should feel compact, structured, fast, readable, and business-first. It should not feel promotional, editorial, decorative, dark, oversized, or elevated by visual effects.
 
-## Goal
+The default source of truth for UI components is `shadcn/ui`. If `shadcn/ui` has a suitable primitive or pattern, shipped UI must use it for navigation, buttons, inputs, selects, cards, dialogs, tables, menus, popovers, badges, pagination, calendars, and other reusable building blocks. Compose ERP-specific patterns on top of those primitives instead of replacing them with browser-native controls or a second component system.
 
-This blueprint exists so a team can start a new ERP project and reproduce the same product quality repeatedly without redesigning the shell each time.
+Project-specific data is replaceable. Brand names, menu labels, routes, dates, user identities, table rows, and page content are examples, not fixed product data. The shell structure, token choices, interaction rules, and component behavior are the stable parts.
 
-The blueprint should guarantee consistency in:
+## Colors
 
-- layout
-- spacing
-- borders
-- navigation hierarchy
-- form behavior
-- table behavior
-- status colors
-- interaction patterns
+The palette is light-mode only and built from neutral working surfaces with strong but quiet borders.
 
-## Component Source Rule
+- **Primary (#171717):** Main action color, active shell affordances, and high-emphasis controls.
+- **Foreground (#111827):** Default readable text for business content.
+- **Secondary (#374151):** Secondary action fills when a filled control is needed.
+- **Muted (#4B5563):** Metadata, helper text, table headers, and secondary labels.
+- **Surface (#FFFFFF):** Cards, sidebar, navbar, popovers, dialogs, forms, and table surfaces.
+- **Panel (#F5F6F8):** Application background and soft table-header background.
+- **Border (#D8DDE6):** The visible structure of the ERP UI.
+- **Input (#DDE3EA):** Form and field border treatment.
+- **Destructive (#B91C1C):** Destructive actions and rejected states.
+- **Success (#047857), Warning (#B45309), Info (#2563EB):** Status semantics for badges, tables, cards, details, and dashboard widgets.
 
-The default source of truth for UI components is `shadcn/ui`.
-
-This is a non-negotiable rule for shipped UI.
-If `shadcn/ui` has a suitable default primitive or pattern, it must be used.
-This applies to every component in the product shell and every business screen.
-Treat `shadcn/ui` as mandatory for navbar, sidebar, buttons, inputs, selects, cards, dialogs, tables, menus, popovers, badges, pagination, and all other reusable UI building blocks.
-Do not ship browser-native form UI in its place.
-
-When building a new project from this blueprint:
-
-1. install the shadcn skill first
-2. use `shadcn/ui` components as the primary building blocks
-3. compose custom ERP patterns on top of those primitives
-4. create custom components only when `shadcn/ui` does not already provide a suitable base
-
-Never replace an available `shadcn/ui` component with a custom or browser-native alternative just for convenience.
-
-Install command:
-
-```bash
-npx skills add shadcn/ui
-```
-
-This rule exists to keep future projects:
-
-- consistent
-- fast to scaffold
-- easy to maintain
-- easy to extend without inventing a second component system
-
-## Non-Native Control Rule
-
-This is a hard rule.
-Shipped controls must render with `shadcn/ui` surfaces and interactions, not browser UI.
-
-Dropdown-like controls must use `shadcn/ui` components, not browser-native UI.
-
-This applies to:
-
-- select
-- dropdown menu
-- context menu
-- menubar
-- popover-based action menus
-- command-driven option pickers
-- date picker
-- date range picker
-- calendar popovers
-
-Do not use:
-
-- native browser `<select>` styling as the final UI
-- native browser `<input type="date">` as the final UI
-- native browser `<input type="datetime-local">` as the final UI
-- native browser `<input type="month">` as the final UI
-- native browser `<input type="week">` as the final UI
-- browser calendar popovers
-- browser time/date chooser UI
-- browser-default context menus
-- unstyled HTML dropdown surfaces
-
-The visual target is the default `shadcn/ui` surface style:
-
-- white floating panel
-- soft border
-- default `shadcn` radius
-- custom hover state
-- custom active state
-- consistent typography
-
-This rule is mandatory because browser-native dropdown UIs are inconsistent across operating systems and break the design system.
-
-## Design Direction
-
-- Light mode only
-- Compact enterprise layout
-- Default `shadcn` radius
-- Sarabun for both Thai and English
-- Base application font size: `14px`
-- Strong border structure
-- White working surfaces on a soft neutral page background
-- Functional and operational tone
-- Minimal decoration
-- No drop shadow anywhere in the shipped ERP UI
-
-The product should feel:
-
-- structured
-- fast
-- readable
-- business-first
-
-The product should not feel:
-
-- promotional
-- editorial
-- overly rounded
-- dark
-- decorative
-- elevated by shadow effects
-
-## Theme Tokens
-
-Use these as the default shell tokens.
-
-```css
-:root {
-  --background: #f5f6f8;
-  --foreground: #111827;
-  --card: #ffffff;
-  --card-foreground: #111827;
-  --popover: #ffffff;
-  --popover-foreground: #111827;
-  --primary: #171717;
-  --primary-foreground: #ffffff;
-  --secondary: #171717;
-  --secondary-foreground: #ffffff;
-  --muted: #eef0f3;
-  --muted-foreground: #6b7280;
-  --accent: #171717;
-  --accent-foreground: #ffffff;
-  --destructive: #b91c1c;
-  --border: #d8dde6;
-  --input: #dde3ea;
-  --ring: rgba(23, 23, 23, 0.18);
-  --sidebar: #ffffff;
-  --sidebar-foreground: #111827;
-  --sidebar-primary: #171717;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f3f4f6;
-  --sidebar-accent-foreground: #111827;
-  --sidebar-border: #d8dde6;
-  --sidebar-ring: rgba(23, 23, 23, 0.18);
-  --radius: 0.625rem;
-}
-```
+Status mapping must remain consistent across the product: `Draft` is neutral, `Pending` is warning, `In Progress` is info, `Approved` and `Complete` are success, `Hold` is warning, and `Cancelled` or `Rejected` are destructive.
 
 ## Typography
 
-- Primary font: `Sarabun`
-- Heading weight: medium to semibold
-- Body weight: regular
-- Metadata: compact and low-emphasis
-- Large numeric values: prominent but controlled
+Use `Sarabun` for both Thai and English. The base application size is `14px`, with compact metadata and controlled heading scale. Headings use medium to semibold weight; body text uses regular weight; labels use compact uppercase metadata styling only where scanning benefits from it, such as table headers.
 
-## Shell Principles
+Do not scale font size with viewport width. Keep letter spacing at `0` for normal text; reserve small positive letter spacing only for compact uppercase metadata labels.
 
-Every standard ERP page should be made from three stable areas:
+## Layout
 
-1. Navbar
-2. Sidebar
-3. Content
-
-These three areas define the product shell.
-They should be reused exactly in structure, even when business content changes.
-
-## Main Layout Blueprint
-
-This is the default composition for every standard ERP page.
+Every standard ERP page is made from three stable areas: `Navbar`, `Sidebar`, and `Content`. Reuse that structure even when business content changes.
 
 ```tsx
 <SidebarProvider defaultOpen>
@@ -197,28 +165,42 @@ This is the default composition for every standard ERP page.
 </SidebarProvider>
 ```
 
-## Shared Measurements
-
-Use these as the default shell measurements.
+Core measurements:
 
 - Navbar height: `h-14`
 - Sidebar header height: `h-14`
 - Navbar horizontal padding: `px-4 md:px-5`
 - Content padding: `px-4 py-4 md:px-5`
 - Sidebar content padding: `px-2 py-2`
-- Base application font size: `14px`
-- Sidebar top-level row height: `h-8`
-- Sidebar sub-menu row height: `h-7`
-- Sidebar menu and sub-menu font size: `14px`; identical for both levels
+- Top-level sidebar row height: `h-8`
+- Sidebar child row height: `h-7`
 - Utility control height: `h-8`
 - User avatar size: `size-6`
 - Brand icon size: `size-8`
 
-## Data Contracts
+The navbar contains a left cluster for the sidebar trigger and a right cluster for the user menu. Do not place a global search box, page title, page subtitle, calendar, date picker, or oversized call to action in the default navbar.
 
-The shell should be driven by data instead of hardcoded product-specific labels.
+The sidebar uses full off-canvas collapse. It must hide completely when collapsed, stay locked to the viewport while content scrolls, support direct links and expandable parents, support nested child items, and use route-aware active states.
 
-### Sidebar Menu Shape
+Content uses white cards on the neutral page background. Cards are the default grouping unit when a section has its own title, represents a workflow, groups related information, or needs a clear business boundary.
+
+## Elevation & Depth
+
+This system is intentionally flat. Do not use drop shadows or `box-shadow` in shipped ERP UI. Hierarchy comes from borders, white surfaces, neutral background bands, table header fills, typography weight, and status color.
+
+Card headers should separate title metadata from body content with a horizontal border. Popovers, dropdowns, dialogs, and menus should use `shadcn/ui` surfaces with white fill, soft border, default radius, and custom hover or active states.
+
+## Shapes
+
+Use the default `shadcn` radius with compact enterprise geometry. Cards, inputs, buttons, menu triggers, and popovers should feel precise and operational, with enough rounding to be modern but not pill-like unless the component is a badge or avatar.
+
+Use `rounded-md` as the default rectangular control shape, `rounded-lg` only where a larger repeated item needs a little more containment, and `rounded-full` for badges or circular controls only.
+
+## Components
+
+### Data Contracts
+
+Drive the shell from data instead of hardcoded product labels.
 
 ```ts
 type SidebarChildItem = {
@@ -235,21 +217,13 @@ type SidebarItem = {
   defaultOpen?: boolean;
   children?: SidebarChildItem[];
 };
-```
 
-### User Menu Shape
-
-```ts
 type UserMenuItem = {
   label: string;
   onSelect?: () => void;
   href?: string;
 };
-```
 
-### Brand Shape
-
-```ts
 type BrandConfig = {
   title: string;
   subtitle?: string;
@@ -257,352 +231,15 @@ type BrandConfig = {
 };
 ```
 
-Recommended default for this shell:
+### Navbar
 
-```ts
-const brand = {
-  title: "Bethezank Lab",
-  subtitle: "www.bethezank.com",
-};
-```
+The sidebar trigger toggles the sidebar on every standard shell page. Use state-aware panel icons: `panel-left-close` when open and `panel-left-open` when closed. The user menu opens a dropdown aligned to the end and contains account-related or shell-level actions.
 
-These shapes are intentionally generic so the shell can be reused in a new project without changing the underlying UI rules.
+All navbar controls are compact and clickable elements use `cursor-pointer`. The navbar background stays white, its bottom border aligns with the sidebar header border, and it must not visually merge into the content area.
 
-## Navbar
+### Sidebar
 
-The navbar is the fixed top action bar.
-
-### Navbar Purpose
-
-- expose sidebar toggle
-- expose user account actions
-- remain visually stable across all pages
-
-### Navbar Structure
-
-The navbar should always render two clusters:
-
-1. left cluster
-2. right cluster
-
-The left cluster should contain:
-
-- sidebar trigger
-
-The right cluster should contain:
-
-- user menu trigger
-
-### Navbar Rules
-
-- No global search box by default
-- No page title in the navbar by default
-- No page subtitle in the navbar by default
-- No calendar or date control in the navbar
-- No oversized CTA in the navbar
-- All navbar controls must remain compact
-- All clickable navbar elements must use `cursor-pointer`
-- The sidebar trigger should use the same panel-style icon shown in the reference layout
-
-### Navbar Wrapper
-
-```tsx
-export function ErpShellHeader({
-  userLabel,
-  userInitials,
-  userMenuItems,
-}: {
-  userLabel: string;
-  userInitials: string;
-  userMenuItems: UserMenuItem[];
-}) {
-  return (
-    <header className="sticky top-0 z-30 h-14 border-b border-[#d8dde6] bg-white">
-      <div className="flex h-full items-center justify-between px-4 md:px-5">
-        <div className="flex items-center gap-2">
-          <SidebarTrigger className="cursor-pointer rounded-md border border-[#d8dde6] bg-white text-slate-900 hover:bg-slate-100" />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex h-8 cursor-pointer items-center gap-2 rounded-md border border-[#d8dde6] bg-white px-2 text-left outline-none transition hover:bg-slate-100">
-              <Avatar className="size-6 rounded-md border border-[#d8dde6]">
-                <AvatarFallback className="bg-[#171717] text-[11px] text-white">
-                  {userInitials}
-                </AvatarFallback>
-              </Avatar>
-              <span className="hidden text-sm font-medium text-slate-900 sm:block">
-                {userLabel}
-              </span>
-              <ChevronDownIcon className="size-4 text-slate-500" />
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent align="end">
-              {userMenuItems.map((item) => (
-                <DropdownMenuItem key={item.label}>{item.label}</DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-    </header>
-  );
-}
-```
-
-### Navbar Events
-
-#### Sidebar Trigger
-
-- toggles sidebar open and closed
-- must work on every standard shell page
-- must use state-aware panel icons
-- when the sidebar is currently open, use `panel-left-close`
-- when the sidebar is currently closed, use `panel-left-open`
-
-Recommended trigger content:
-
-```tsx
-<Button
-  variant="outline"
-  size="icon"
-  className="size-10 cursor-pointer rounded-xl border-[#d8dde6] bg-white text-slate-900 shadow-none"
->
-  {isSidebarOpen ? (
-    <PanelLeftCloseIcon className="size-5" />
-  ) : (
-    <PanelLeftOpenIcon className="size-5" />
-  )}
-</Button>
-```
-
-#### Utility Actions
-
-- are not part of the default navbar for this shell
-- should be added only if the project later has a clear shell-level need
-- must not reintroduce a calendar or date picker into the navbar
-
-#### User Menu
-
-- opens a dropdown aligned to the end
-- contains account-related or shell-level actions
-
-### Navbar Alignment Rules
-
-- Navbar bottom border must align with the sidebar header bottom border
-- Navbar background must stay white
-- Navbar must not visually merge into the content area
-
-## Sidebar
-
-The sidebar is the persistent module navigation area.
-
-### Sidebar Purpose
-
-- define module hierarchy
-- expose top-level navigation
-- expose second-level navigation
-- preserve user orientation across the app
-
-### Sidebar Behavior Rules
-
-- Must use full off-canvas collapse
-- Must hide 100% when collapsed
-- Must not use icon-only collapse as the default ERP behavior
-- Must stay locked to the viewport while page content scrolls
-- Must support direct-link items
-- Must support expandable parent items
-- Must support nested child items
-- Must use route-aware active states
-- All clickable rows must use `cursor-pointer`
-
-### Sidebar Wrapper
-
-```tsx
-export function AppSidebar({
-  items,
-  footerItems,
-  brand,
-}: {
-  items: SidebarItem[];
-  footerItems?: SidebarChildItem[];
-  brand: BrandConfig;
-}) {
-  const pathname = usePathname();
-  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(
-    Object.fromEntries(
-      items
-        .filter((item) => item.children?.length)
-        .map((item) => [item.title, Boolean(item.defaultOpen)])
-    )
-  );
-
-  const toggleMenu = (title: string) => {
-    setOpenMenus((current) => ({
-      ...current,
-      [title]: !current[title],
-    }));
-  };
-
-  return (
-    <Sidebar
-      collapsible="offcanvas"
-      variant="sidebar"
-      className="fixed inset-y-0 left-0 z-40 border-r border-[#d8dde6] bg-white text-slate-900"
-    >
-      <SidebarHeader className="h-14 justify-center border-b border-[#d8dde6] bg-white px-4 py-0">
-        <div className="flex items-center gap-3">
-          <div className="flex size-8 items-center justify-center rounded-md border border-[#d8dde6] bg-[#171717] text-white">
-            {brand.icon}
-          </div>
-          <div>
-            <p className="truncate text-sm font-semibold text-slate-900">
-              {brand.title}
-            </p>
-            {brand.subtitle ? (
-              <p className="truncate text-[11px] text-slate-500">
-                {brand.subtitle}
-              </p>
-            ) : null}
-          </div>
-        </div>
-      </SidebarHeader>
-
-      <SidebarContent className="bg-white px-2 py-2">
-        <SidebarGroup className="gap-1">
-          <SidebarGroupLabel className="px-2 text-[11px] uppercase tracking-[0.18em] text-slate-500">
-            Workspace
-          </SidebarGroupLabel>
-
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  {item.children?.length ? (
-                    <>
-                      <SidebarMenuButton
-                        size="default"
-                        onClick={() => toggleMenu(item.title)}
-                        className="h-8 px-2 text-sm"
-                      >
-                        {item.icon ? <item.icon className="size-4" /> : null}
-                        <span>{item.title}</span>
-                        {item.badge ? (
-                          <SidebarMenuBadge className="right-7 top-1.5 min-w-4 px-1 text-[10px] text-slate-500">
-                            {item.badge}
-                          </SidebarMenuBadge>
-                        ) : null}
-                        <ChevronDownIcon
-                          className={`ml-auto size-4 transition-transform ${
-                            openMenus[item.title] ? "rotate-180" : ""
-                          }`}
-                        />
-                      </SidebarMenuButton>
-
-                      {openMenus[item.title] ? (
-                        <SidebarMenuSub className="mx-2 mt-1 gap-1 border-l border-[#d8dde6] px-2 py-1">
-                          {item.children.map((subItem) => (
-                            <SidebarMenuSubItem key={subItem.title}>
-                              <SidebarMenuSubButton
-                                render={<Link href={subItem.href} />}
-                                className="h-7 px-2 text-sm"
-                              >
-                                {subItem.icon ? (
-                                  <subItem.icon className="size-3.5" />
-                                ) : null}
-                                <span>{subItem.title}</span>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      ) : null}
-                    </>
-                  ) : (
-                    <SidebarMenuButton
-                      isActive={pathname === item.href}
-                      render={<Link href={item.href ?? "#"} />}
-                      className="h-8 px-2 text-sm"
-                    >
-                      {item.icon ? <item.icon className="size-4" /> : null}
-                      <span>{item.title}</span>
-                    </SidebarMenuButton>
-                  )}
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-
-      {footerItems?.length ? (
-        <SidebarFooter className="border-t border-[#d8dde6] bg-white p-2">
-          <SidebarMenu>
-            {footerItems.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton className="h-8 px-2 text-sm">
-                  {item.icon ? <item.icon className="size-4" /> : null}
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarFooter>
-      ) : null}
-
-      <SidebarRail />
-    </Sidebar>
-  );
-}
-```
-
-### Sidebar Event Model
-
-#### Direct-Link Item
-
-- click navigates to its route
-- active state follows the current route
-
-#### Expandable Parent Item
-
-- click toggles local open state
-- parent row is an interaction row by default
-- it may optionally navigate in a different project, but that should be a deliberate rule
-
-#### Child Item
-
-- click navigates to its route
-- child row must remain visually subordinate to the parent
-
-#### Collapse Trigger
-
-- controlled from the navbar sidebar trigger
-- when collapsed, the sidebar leaves the content area completely
-
-### Sidebar Visual Rules
-
-- White background
-- Shared border color
-- Header height must match navbar height
-- Sidebar shell must be viewport-locked
-- Sidebar internal menu area may scroll only if the menu content exceeds viewport height
-- Menu spacing must stay compact
-- Top-level row height: `h-8`
-- Child row height: `h-7`
-- Sub-menu text size must match top-level menu text size
-- Do not use reduced typography for child items
-- Sub-menu indentation must stay visible
-- Chevron rotation must communicate open state
-
-### Sidebar Scroll Rule
-
-This is a required shell behavior.
-
-- The page scrollbar must scroll only the content area
-- The sidebar must remain fixed in place
-- The sidebar must not visually slide upward while the main page scrolls
-- If a project has a very long menu, only the sidebar's internal content region should scroll
-
-Recommended structure:
+Use `collapsible="offcanvas"` and keep the sidebar fixed to the viewport:
 
 ```tsx
 <Sidebar className="fixed inset-y-0 left-0 z-40 border-r border-[#d8dde6] bg-white text-slate-900">
@@ -612,54 +249,11 @@ Recommended structure:
 </Sidebar>
 ```
 
-### Sidebar Configuration Guidance
+Direct-link items navigate to their route and follow route-aware active state. Expandable parent items toggle local open state. Child rows navigate to routes and remain visually subordinate through indentation, not smaller typography.
 
-The exact menu tree should be configured per project.
-Do not hardcode one project's modules into the blueprint.
+### Cards
 
-Recommended structure:
-
-- direct-link items for top-level pages
-- expandable parent items for grouped modules
-- child items for second-level flows
-- optional footer utilities for settings or system tools
-
-Recommended defaults:
-
-- open one important section by default so hierarchy is visible
-- keep the rest collapsed to reduce noise
-
-## Content
-
-The content area is the main work surface.
-
-### Content Purpose
-
-- host cards
-- host forms
-- host tables
-- host detail panels
-- host charts and workflow UI
-
-### Content Wrapper
-
-```tsx
-<div className="flex-1 px-4 py-4 md:px-5">{children}</div>
-```
-
-### Content Rules
-
-- Page background stays on the shared neutral background
-- Main work areas use white cards
-- Borders stay visible but soft
-- Spacing stays compact
-- Cards are the default grouping unit
-- Card structure should be built from `shadcn/ui` card primitives
-- Card surfaces must use real background fill, not shadow as a simulated background
-- Decorative empty space should be minimized
-- Card headers should visually separate title metadata from the card body
-
-### Card Blueprint
+Use `shadcn/ui` card primitives with white fill, soft border, and no shadow.
 
 ```tsx
 <Card className="border-[#d8dde6] bg-white shadow-none">
@@ -671,403 +265,41 @@ The content area is the main work surface.
       Short supporting description.
     </CardDescription>
   </CardHeader>
-  <CardContent className="space-y-4 px-5 py-4">
-    {content}
-  </CardContent>
+  <CardContent className="space-y-4 px-5 py-4">{content}</CardContent>
 </Card>
 ```
 
-Use cards when:
+### Buttons And Menus
 
-- a section has its own title
-- a section represents one workflow
-- a section groups related information
-- a section needs a clear business boundary
+Buttons come from `shadcn/ui`, use compact spacing, and use `cursor-pointer`. Primary buttons use `--primary`; destructive buttons use `--destructive`; secondary, outline, and ghost variants should stay visually quieter than the main action.
 
-### Card Header Rule
+Menus, dropdowns, context menus, menubars, popovers, command pickers, date pickers, date ranges, and calendar popovers must render as custom `shadcn/ui` surfaces. Do not ship browser-default dropdown, context menu, calendar, or date chooser chrome.
 
-This is the default ERP card pattern.
+### Forms
 
-- Card header should contain a title and an optional subtitle
-- Card header should be separated from the body with a horizontal border
-- Title should use stronger contrast than the subtitle
-- Subtitle should stay readable but lower-emphasis
-- Body content should begin below the separator line, not visually merge into the header
-- Cards must not use shadow as the background surface or as the primary separation treatment
-- Prefer white fill plus border; keep card shadow removed with `shadow-none`
+Forms are compact, structured, and operational. Required coverage includes text input, select, textarea, checkbox, radio group, switch, disabled field, read-only field, file upload, thumbnail image preview with remove action, date picker, and date range.
 
-## Buttons
+Select-like controls must use `shadcn/ui` `Select`, not native `<select>` as the shipped UI. Date controls must use a `shadcn/ui` popover/calendar pattern, not native `<input type="date">`, `<input type="datetime-local">`, `<input type="month">`, or `<input type="week">`.
 
-Buttons should come from `shadcn/ui` and follow compact enterprise spacing.
+Image upload previews are small thumbnails with a corner remove action. Removing one image removes only that preview item, and previews stay compact enough to support repeated business workflows.
 
-```tsx
-<div className="flex flex-wrap gap-2">
-  <Button className="cursor-pointer">Primary action</Button>
-  <Button variant="secondary" className="cursor-pointer">
-    Secondary
-  </Button>
-  <Button variant="outline" className="cursor-pointer">
-    Outline
-  </Button>
-  <Button variant="ghost" className="cursor-pointer">
-    Ghost
-  </Button>
-  <Button variant="destructive" className="cursor-pointer">
-    Destructive
-  </Button>
-</div>
-```
+### Tables
 
-Rules:
+Tables are a primary ERP surface. They require clear headers, compact rows, status badges, gray table header background, horizontal overflow handling, rows-per-page selector, and pagination.
 
-- use compact spacing
-- primary button color uses `--primary`
-- all buttons must use `cursor-pointer`
-- do not oversize buttons unless there is a true workflow reason
+Wrap wide tables in an `overflow-x-auto` container and give the table a minimum width so columns remain readable. Pagination and rows-per-page controls live in the same footer area. Rows-per-page options are `10`, `20`, `50`, and `100`.
 
-## Badges
+## Do's and Don'ts
 
-Badges should cover both generic badges and ERP workflow status badges.
-
-```tsx
-<div className="flex flex-wrap gap-2">
-  <Badge>Default</Badge>
-  <Badge variant="secondary">Secondary</Badge>
-  <Badge variant="outline">Outline</Badge>
-  <Badge className="border border-emerald-200 bg-emerald-50 text-emerald-700">
-    Approved
-  </Badge>
-  <Badge className="border border-amber-200 bg-amber-50 text-amber-700">
-    Pending
-  </Badge>
-  <Badge className="border border-rose-200 bg-rose-50 text-rose-700">
-    Cancelled
-  </Badge>
-</div>
-```
-
-### Shared Status Mapping
-
-- Draft: neutral
-- Pending: amber
-- In Progress: blue
-- Approved: success green
-- Complete: success green
-- Hold: orange
-- Cancelled: rose
-- Rejected: red
-
-This mapping must stay identical across:
-
-- badges
-- tables
-- cards
-- detail screens
-- dashboard widgets
-
-## Forms
-
-Forms should feel compact, structured, and operational.
-
-### Required Form Coverage
-
-- text input
-- select
-- textarea
-- checkbox
-- radio group
-- switch
-- disabled field
-- read-only field
-- file upload
-- thumbnail image preview with remove action
-- date picker
-- date range
-
-### Form Rules
-
-- controls align cleanly in grid layouts
-- controls use shared tokens
-- controls avoid consumer-style oversized presentation
-- all actionable controls use `cursor-pointer`
-- select-like controls must use `shadcn/ui` `Select`, not browser-native `<select>` as the shipped UI
-- date-related controls must use a `shadcn/ui` popover/calendar pattern, not browser-native date inputs as the shipped UI
-- no shipped form control may expose browser-default dropdown or calendar chrome
-
-### Select Pattern
-
-```tsx
-<Select defaultValue="20">
-  <SelectTrigger className="w-24 cursor-pointer">
-    <SelectValue />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="10">10</SelectItem>
-    <SelectItem value="20">20</SelectItem>
-    <SelectItem value="50">50</SelectItem>
-    <SelectItem value="100">100</SelectItem>
-  </SelectContent>
-</Select>
-```
-
-Select rules:
-
-- the trigger must be a styled `shadcn/ui` trigger
-- the options panel must be a custom `shadcn/ui` floating layer
-- the final UI must not fall back to browser-default select styling
-
-### Date Picker Rule
-
-Date selection must not use browser-native picker UI.
-
-Required pattern:
-
-- use `shadcn/ui` trigger styling
-- open a custom popover
-- render a custom calendar surface
-- keep typography, spacing, and border treatment consistent with default `shadcn/ui`
-
-Forbidden shipped UI:
-
-- `<input type="date">`
-- `<input type="datetime-local">`
-- `<input type="month">`
-- `<input type="week">`
-- any browser-rendered calendar or date chooser popup
-
-### Image Upload Preview Pattern
-
-This is a required reusable form pattern.
-
-```tsx
-<div className="flex flex-wrap gap-3">
-  {images.map((image) => (
-    <div
-      key={image.id}
-      className="relative w-20 rounded-lg border border-[#d8dde6] bg-white p-1"
-    >
-      <button
-        type="button"
-        className="absolute -right-2 -top-2 flex size-5 cursor-pointer items-center justify-center rounded-full border border-[#d8dde6] bg-white text-[10px] text-slate-700"
-        onClick={() => removeImage(image.id)}
-      >
-        X
-      </button>
-      <img
-        src={image.src}
-        alt={image.alt}
-        className="h-16 w-full rounded-md object-cover"
-      />
-      <p className="mt-1 truncate text-[11px] text-slate-500">{image.name}</p>
-    </div>
-  ))}
-</div>
-```
-
-Behavior rules:
-
-- selected images appear as small thumbnails
-- each thumbnail has a corner remove action
-- removing one image removes only that preview item
-- previews stay compact and never dominate the form
-
-## Tables
-
-Tables are a primary ERP surface and must stay consistent.
-
-### Required Table Features
-
-- clear headers
-- compact rows
-- status badges
-- gray table header background
-- horizontal scrollbar when the table is wider than the viewport or card width
-- rows-per-page selector
-- pagination
-
-### Table Rules
-
-- table structure should be built from `shadcn/ui` table primitives
-- status badges in rows must use the shared badge color mapping
-- `Approved` and `Complete` must use success styling
-- table header row must use a soft gray background to separate column labels from row data
-- the table must remain usable on smaller screens without breaking the layout
-- when columns exceed available width, the table must scroll horizontally inside its own container
-- pagination and rows-per-page must live in the same control area
-- rows-per-page must support:
-  - `10`
-  - `20`
-  - `50`
-  - `100`
-
-### Table Header Pattern
-
-```tsx
-<Table>
-  <TableHeader className="bg-slate-50">
-    <TableRow className="border-[#d8dde6] hover:bg-slate-50">
-      <TableHead className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-        Order
-      </TableHead>
-      <TableHead className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-        Customer
-      </TableHead>
-      <TableHead className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-        Status
-      </TableHead>
-    </TableRow>
-  </TableHeader>
-</Table>
-```
-
-Header rules:
-
-- header background should be `bg-slate-50` or equivalent soft gray
-- header labels should use compact uppercase metadata styling
-- header should visually separate labels from body rows immediately
-
-### Table Overflow Pattern
-
-```tsx
-<div className="overflow-x-auto rounded-lg border border-[#d8dde6]">
-  <Table className="min-w-[720px]">
-    <TableHeader className="bg-slate-50">
-      <TableRow className="border-[#d8dde6] hover:bg-slate-50">
-        <TableHead className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-          Order ID
-        </TableHead>
-        <TableHead className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-          Customer
-        </TableHead>
-        <TableHead className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-          Warehouse
-        </TableHead>
-        <TableHead className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-          Status
-        </TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>{rows}</TableBody>
-  </Table>
-</div>
-```
-
-Overflow rules:
-
-- wrap wide tables in `overflow-x-auto`
-- give the table a minimum width so columns keep readable spacing
-- horizontal scrolling must happen inside the table container, not across the whole page
-- the scrollbar should remain visible at the bottom of the table container when overflow exists
-
-### Table Footer Pattern
-
-```tsx
-<div className="flex flex-col gap-3 border-t border-[#d8dde6] pt-3 md:flex-row md:items-center md:justify-between">
-  <div className="flex items-center gap-2">
-    <span className="text-sm text-slate-500">Rows per page</span>
-    <Select defaultValue="20">
-      <SelectTrigger className="w-24 cursor-pointer">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="10">10</SelectItem>
-        <SelectItem value="20">20</SelectItem>
-        <SelectItem value="50">50</SelectItem>
-        <SelectItem value="100">100</SelectItem>
-      </SelectContent>
-    </Select>
-  </div>
-
-  <Pagination>
-    <PaginationContent>
-      <PaginationItem>
-        <PaginationPrevious href="#" className="cursor-pointer" />
-      </PaginationItem>
-      <PaginationItem>
-        <PaginationLink href="#" isActive className="cursor-pointer">
-          1
-        </PaginationLink>
-      </PaginationItem>
-      <PaginationItem>
-        <PaginationNext href="#" className="cursor-pointer" />
-      </PaginationItem>
-    </PaginationContent>
-  </Pagination>
-</div>
-```
-
-## Global Interaction Rules
-
-- Every clickable element must use `cursor-pointer`
-- Shell interactions must feel immediate
-- Motion should communicate state, not decoration
-- Chevron rotation is a state indicator, not a decorative animation
-- Hover states should be subtle and functional
-- Menus and dropdowns must use custom `shadcn/ui` surfaces, never browser-native UI
-- Browser-native control chrome is not allowed in shipped ERP screens
-- Drop shadow and box-shadow are forbidden in all shipped UI components
-
-## Menu Surface Pattern
-
-Use the default `shadcn/ui` pattern for menus.
-
-```tsx
-<Menubar>
-  <MenubarMenu>
-    <MenubarTrigger className="cursor-pointer">View</MenubarTrigger>
-    <MenubarContent>
-      <MenubarItem className="cursor-pointer">Compact density</MenubarItem>
-      <MenubarItem className="cursor-pointer">Audit trail</MenubarItem>
-    </MenubarContent>
-  </MenubarMenu>
-</Menubar>
-```
-
-Menu rules:
-
-- menu surfaces should look like `shadcn/ui` defaults
-- menu items should use custom hover and focus states
-- menu appearance must remain consistent across browsers and operating systems
-
-## Reuse Rules
-
-If you start a new project from this blueprint:
-
-- use `shadcn/ui` as the source for every reusable component by default
-- keep the shell structure
-- keep the spacing system
-- keep the border system
-- keep the badge color mapping
-- keep full off-canvas sidebar collapse
-- keep the compact enterprise interaction style
-- do not swap in browser-native UI or a parallel component library where `shadcn/ui` already covers the need
-- replace only project-specific data such as:
-  - brand name
-  - menu tree
-  - routes
-  - utility actions
-  - user identity
-  - table data
-  - page content
-
-## Implementation Checklist
-
-Before approving a new screen, confirm:
-
-- every reusable UI component is built from `shadcn/ui` primitives or patterns when available
-- the shell uses Navbar, Sidebar, and Content in the same structure
-- navbar border aligns with sidebar header border
-- sidebar collapses fully off-canvas
-- sidebar supports direct links and expandable sub-menus
-- menu configuration is data-driven, not hardcoded into layout logic
-- content uses white cards on the neutral page background
-- buttons, badges, and cards follow the shared component rules
-- cards do not use shadow as a fake background or primary separation layer
-- no component uses drop shadow or box-shadow in any state
-- forms include compact operational states
-- image upload preview uses thumbnail plus corner remove action
-- tables include status consistency, rows-per-page, and pagination
-- every clickable element uses `cursor-pointer`
-- no component falls back to browser-native UI when a `shadcn/ui` option exists
-
-If any of these fail, the page is no longer a faithful implementation of the blueprint.
+- Do use `shadcn/ui` primitives or patterns whenever they exist.
+- Do keep the shell data-driven and replace only project-specific brand, menu, route, user, and content data.
+- Do keep navbar, sidebar, and content structure consistent across standard ERP pages.
+- Do use borders and flat surfaces for hierarchy.
+- Do keep all clickable controls visibly interactive with `cursor-pointer`.
+- Do keep table status colors consistent with the shared status mapping.
+- Don't use browser-native select, date, calendar, dropdown, or context-menu UI in shipped screens.
+- Don't use drop shadow or `box-shadow` in any shipped UI state.
+- Don't add default navbar search, page titles, date controls, or oversized calls to action without a clear shell-level reason.
+- Don't reduce sidebar child typography below the top-level menu size.
+- Don't let wide tables break the page; contain horizontal scroll inside the table region.
+- Don't hardcode one project's module tree into reusable shell logic.

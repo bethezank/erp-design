@@ -1,0 +1,24 @@
+{
+  "name": "erp-design",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "design:lint" : "design.md lint DESIGN.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bethezank/erp-design.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bethezank/erp-design/issues"
+  },
+  "homepage": "https://github.com/bethezank/erp-design#readme",
+  "description": "",
+  "dependencies": {
+    "@google/design.md": "^0.1.1"
+  }
+}
